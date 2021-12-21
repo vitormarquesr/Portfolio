@@ -1,6 +1,8 @@
 ---
 title: "Análise dos 1000 filmes mais bem avaliados"
-output: html_notebook
+output:
+  github_document: default
+  html_notebook: default
 ---
 
 -----------------------
@@ -16,7 +18,7 @@ library(tidyverse)
 library(forcats)
 library(stringr)
 
-df <- read_csv("C:/Users/vmrod/Desktop/Repositorios/Portfolio/Analise_Filmes/imdb_top_1000.csv", show_col_types = FALSE)
+df <- read_csv("imdb_top_1000.csv", show_col_types = FALSE)
 
 ```
 
