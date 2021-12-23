@@ -110,7 +110,7 @@ O filme da linha 967 é “Apollo 13”, podemos descobrir o ano de
 lançamento dele no google e consertar esse erro.
 
 ``` r
-df <- df %>% mutate(Released_Year = ifelse(Released_Year=="Apollo 13", 1995, Released_Year))
+df <- df %>% mutate(Released_Year = ifelse(Series_Title=="Apollo 13", 1995, Released_Year))
 ```
 
 Substituindo o dado faltante pelo ano de lançamento de “Apollo 13”
@@ -224,13 +224,10 @@ possíveis. Filtrando as mais importantes, analisaremos nesta ordem:
 
 -   **IMDB\_Rating**
 -   **Released\_Year**
--   **Runtime**
--   **Director**
 -   **Genre**
--   **Stars**
 
 Usaremos o data frame original (df) para todas as variáveis exceto Genre
-(usaremos df\_genero) e para Stars criaremos outro data frame.
+(usaremos df\_genero).
 
 ### 2.1.1 - IMDB\_Rating
 
@@ -292,3 +289,36 @@ df %>% filter(IMDB_Rating>=8.7) %>%
     ## 18 One Flew Over the Cuckoo's Nest                           8.7
 
 Podemos ver os dezoito filmes com notas atipicamente altas.
+
+### 2.1.2 - Released\_Year
+
+Faremos também um histograma para essa variável.
+
+``` r
+df %>% ggplot(aes(x=Released_Year))+
+  geom_histogram(binwidth = 4, fill="light blue", colour="grey")+
+  geom_vline(xintercept = median(df$Released_Year))+
+  geom_text(aes(x=median(df$Released_Year), y=100, 
+                label=str_c("Mediana: ",median(df$Released_Year))),
+            nudge_x = -15)+
+  geom_freqpoly(binwidth=4, colour="green")+
+  labs(y="Número de filmes")
+```
+
+![](Analise_Filmes_Notebook_files/figure-gfm/released_year-1.png)<!-- -->
+
+-   **Análise:** Observando o histograma e a mediana, concluímos que
+    dentre os 1000 filmes mais bem avaliados, há uma maior densidade de
+    filmes mais novos (Lançados depois de 1999). Ou seja, há uma grande
+    quantidade de filmes novos bem avaliados proporcionalmente ao
+    intervalo de lançamento (de aproximadamente 20 anos).
+
+-   **Explicação:** Isso se deve provavelmente ao fato de que a
+    indústria cinematográfica cresce a cada ano, logo a quantidade de
+    filmes lançados aumenta todo ano. Com o aumento da oferta, a
+    quantidade absoluta de filmes bons também aumenta. É possível
+    perceber isso no histograma, a frequência cresce com o passar dos
+    anos.
+
+Vamos posteriormente analisar como o ano de lançamento afeta o
+IMDB\_Rating do filme.
