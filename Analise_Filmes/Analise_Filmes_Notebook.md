@@ -209,3 +209,86 @@ Por enquanto essas transformações serão suficientes, mais à frente
 faremos mais a fim de analisar também os atores.
 
 ------------------------------------------------------------------------
+
+# 2 - Analisando os dados
+
+Vamos começar analisando a variação dentro das variáveis e depois
+investigaremos a covariação entre as variáveis.
+
+------------------------------------------------------------------------
+
+## 2.1 - Variação
+
+A fim de sermos suscintos não vamos analisar todas as variáveis
+possíveis. Filtrando as mais importantes, analisaremos nesta ordem:
+
+-   **IMDB\_Rating**
+-   **Released\_Year**
+-   **Runtime**
+-   **Director**
+-   **Genre**
+-   **Stars**
+
+Usaremos o data frame original (df) para todas as variáveis exceto Genre
+(usaremos df\_genero) e para Stars criaremos outro data frame.
+
+### 2.1.1 - IMDB\_Rating
+
+Como é uma variável contínua usaremos um histograma
+
+``` r
+df %>% ggplot(aes(x=IMDB_Rating))+
+  geom_histogram(binwidth=0.1)+
+  labs(y="Número de Filmes")+
+  geom_vline(xintercept = median(df$IMDB_Rating))+
+  geom_text(aes(x=median(df$IMDB_Rating), y=160,
+                label=str_c("Mediana: ",median(df$IMDB_Rating))),
+            nudge_x=0.2)
+```
+
+![](Analise_Filmes_Notebook_files/figure-gfm/variacao%20IMDB%20hist-1.png)<!-- -->
+
+A partir do rating 8.0 cada vez menos filmes se apresentam, indicando
+que obter uma nota acima de 8.0 é bastante difícil. Vamos analisar o
+gráfico de boxplot agora.
+
+``` r
+df %>% ggplot(aes(x="", y=IMDB_Rating))+
+  geom_boxplot()+
+  labs(x="")
+```
+
+![](Analise_Filmes_Notebook_files/figure-gfm/variacao%20IMDB%20boxplot-1.png)<!-- -->
+
+Filmes acima de 8.7 são classificados como outliers, pois são raros.
+Vamos ver quais filmes são esses.
+
+``` r
+df %>% filter(IMDB_Rating>=8.7) %>%
+  select(Series_Title, IMDB_Rating) %>%
+    arrange(desc(IMDB_Rating))
+```
+
+    ## # A tibble: 18 x 2
+    ##    Series_Title                                      IMDB_Rating
+    ##    <chr>                                                   <dbl>
+    ##  1 The Shawshank Redemption                                  9.3
+    ##  2 The Godfather                                             9.2
+    ##  3 The Dark Knight                                           9  
+    ##  4 The Godfather: Part II                                    9  
+    ##  5 12 Angry Men                                              9  
+    ##  6 The Lord of the Rings: The Return of the King             8.9
+    ##  7 Pulp Fiction                                              8.9
+    ##  8 Schindler's List                                          8.9
+    ##  9 Inception                                                 8.8
+    ## 10 Fight Club                                                8.8
+    ## 11 The Lord of the Rings: The Fellowship of the Ring         8.8
+    ## 12 Forrest Gump                                              8.8
+    ## 13 Il buono, il brutto, il cattivo                           8.8
+    ## 14 The Lord of the Rings: The Two Towers                     8.7
+    ## 15 The Matrix                                                8.7
+    ## 16 Goodfellas                                                8.7
+    ## 17 Star Wars: Episode V - The Empire Strikes Back            8.7
+    ## 18 One Flew Over the Cuckoo's Nest                           8.7
+
+Podemos ver os dezoito filmes com notas atipicamente altas.

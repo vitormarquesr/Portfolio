@@ -1,8 +1,8 @@
 ---
 title: "Análise dos 1000 filmes mais bem avaliados"
 output:
-  github_document: default
   html_notebook: default
+  github_document: default
 ---
 
 -----------------------
@@ -172,3 +172,58 @@ df_genero <- df %>% separate_rows(Genre, sep=",") %>%
 Por enquanto essas transformações serão suficientes, mais à frente faremos mais a fim de analisar também os atores.
 
 -------
+
+# 2 - Analisando os dados
+
+Vamos começar analisando a variação dentro das variáveis e depois investigaremos a covariação entre as variáveis.
+
+-------
+
+## 2.1 - Variação
+A fim de sermos suscintos não vamos analisar todas as variáveis possíveis. Filtrando as mais importantes, analisaremos nesta ordem:
+
+* **IMDB_Rating**
+* **Released_Year**
+* **Runtime**
+* **Director**
+* **Genre**
+* **Stars**
+
+Usaremos o data frame original (df) para todas as variáveis exceto Genre (usaremos df_genero) e para Stars criaremos outro data frame.
+
+### 2.1.1 - IMDB_Rating
+Como é uma variável contínua usaremos um histograma
+
+```{r variacao IMDB hist}
+df %>% ggplot(aes(x=IMDB_Rating))+
+  geom_histogram(binwidth=0.1)+
+  labs(y="Número de Filmes")+
+  geom_vline(xintercept = median(df$IMDB_Rating))+
+  geom_text(aes(x=median(df$IMDB_Rating), y=160,
+                label=str_c("Mediana: ",median(df$IMDB_Rating))),
+            nudge_x=0.2)
+
+```
+
+A partir do rating 8.0 cada vez menos filmes se apresentam, indicando que obter uma nota acima de 8.0 é bastante difícil. Vamos analisar o gráfico de boxplot agora.
+
+```{r variacao IMDB boxplot}
+df %>% ggplot(aes(x="", y=IMDB_Rating))+
+  geom_boxplot()+
+  labs(x="")
+
+```
+
+Filmes acima de 8.7 são classificados como outliers, pois são raros. Vamos ver quais filmes são esses.
+
+```{r variacao IMDB outliers}
+df %>% filter(IMDB_Rating>=8.7) %>%
+  select(Series_Title, IMDB_Rating) %>%
+    arrange(desc(IMDB_Rating))
+
+```
+Podemos ver os dezoito filmes com notas atipicamente altas.
+
+
+
+
