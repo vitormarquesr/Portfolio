@@ -345,7 +345,7 @@ df_genero %>% count(Genre) %>%
     popular. Outra explicação possível para ele aparecer em tantos
     filmes bem avaliados é o fato de ele ser um gênero bem amplo, ou
     seja, pode acompanhar vários outros gêneros, como Biografia,
-    Romance, Comédia (Comédia Romântica por exemplo). Vamos investigar
+    Romance, Comédia (Comédia Dramática por exemplo). Vamos investigar
     essa hipótese.
 
 Utilizando o data frame original, vamos selecionar os que drama está na
