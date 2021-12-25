@@ -322,3 +322,52 @@ df %>% ggplot(aes(x=Released_Year))+
 
 Vamos posteriormente analisar como o ano de lançamento afeta o
 IMDB\_Rating do filme.
+
+### 2.1.3 - Genre
+
+Vamos usar o df\_genero para essa variável, pois um filme pode ter mais
+de um gênero. Dividimos os gêneros em observações para facilitar.
+
+``` r
+df_genero %>% count(Genre) %>%
+  ggplot(aes(x=fct_reorder(Genre, n), y=n))+
+  geom_col(fill="seagreen2")+
+  coord_flip()+
+  labs(x="Gênero", y= "Número de filmes")
+```
+
+![](Analise_Filmes_Notebook_files/figure-gfm/Genre-1.png)<!-- -->
+
+-   **Análise**: Podemos observar que dentre os filmes mais bem
+    avaliados, o gênero Drama está presente em grande parte deles.
+
+-   **Explicação**: É possível que Drama de fato seja um gênero bem
+    popular. Outra explicação possível para ele aparecer em tantos
+    filmes bem avaliados é o fato de ele ser um gênero bem amplo, ou
+    seja, pode acompanhar vários outros gêneros, como Biografia,
+    Romance, Comédia (Comédia Romântica por exemplo). Vamos investigar
+    essa hipótese.
+
+Utilizando o data frame original, vamos selecionar os que drama está na
+descrição de Gênero.
+
+``` r
+df %>% filter(str_detect(Genre, "Drama")) %>%
+  separate_rows(Genre, sep=",") %>%
+  mutate(Genre=str_trim(Genre)) %>%
+  count(Genre) %>% arrange(desc(n)) %>%
+  filter(Genre!="Drama") %>%
+  ggplot(aes(x=fct_reorder(Genre, n), y=n))+
+  geom_col(fill="indianred")+
+  coord_flip()+
+  labs(x="Gêneros que acompanham Drama", y="Número de filmes")
+```
+
+![](Analise_Filmes_Notebook_files/figure-gfm/Genre%20hipotese-1.png)<!-- -->
+
+Como pode ser observado, muitos filmes classificados como Drama, também
+são classificados como Romance, Crime, Biografia e Comédia. Esse fato dá
+suporte à hipótese de que muitos filmes bem avaliados também têm a
+classificação Drama por Drama ser um gênero muito abrangente. Afinal,
+drama está presente em quase todo filme, é uma condição para um bom
+enredo.
