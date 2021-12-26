@@ -277,3 +277,42 @@ df %>% filter(str_detect(Genre, "Drama")) %>%
 ```
 
 Como pode ser observado, muitos filmes classificados como Drama, também são classificados como Romance, Crime, Biografia e Comédia. Esse fato dá suporte à hipótese de que muitos filmes bem avaliados também têm a classificação Drama por Drama ser um gênero muito abrangente. Afinal, drama está presente em quase todo filme, é uma condição para um bom enredo.
+
+-----------
+
+## 2.2 - Covariação
+Agora vamos analisar como uma variável varia em função de outra. Para facilitar, dividiremos em tipos de variável.
+
+### 2.2.1 - Contínua x Contínua
+
+#### 2.2.1.1 - Meta_Score x IMDB_Rating
+Lembrando, Meta_Score é atribuído pela crítica especializada, estudiosos do assunto. Já IMDB_Rating é dado por usuários comuns que podem ser leigos no assunto.
+
+> Pergunta: Filmes bem avaliados pelo público tendem também a ser bem avalidos pela crítica?
+
+```{r Meta_Score x IMDB_Rating, message=FALSE, warning=FALSE}
+df %>% ggplot(aes(x=IMDB_Rating, y=Meta_score))+
+  geom_point()+
+  geom_smooth(se=FALSE)
+
+```
+
+Primeiramente, vamos observar que IMDB_Rating só assume números com uma casa decimal, por isso as linhas verticais. Vamos adicionar um pouco de ruído para facilitar a observação.
+
+```{r Meta_Score x IMDB_Rating jitter, message=FALSE, warning=FALSE}
+df %>% ggplot(aes(x=IMDB_Rating, y=Meta_score))+
+  geom_jitter()+
+  geom_smooth(se=FALSE)
+
+```
+
+* **Análise:** Pelo modelo ajustado com geom_smooth (a linha azul), é possível observar que há um crescimento do Meta_Score com o crescimento do IMDB_Rating. Porém esse comportamento está longe de ser linear. Além disso, quanto menor o IMDB_Rating, maior a variação de Meta_score, ou seja, menor o consenso entre Críticos e Público. 
+
+Vamos observar alguns filmes que são bem avaliados pelo público, mas não pelo Meta_score.
+
+```{r }
+df %>% filter(Meta_score < 50) %>% select(Series_Title, Meta_score, IMDB_Rating) %>% arrange(Meta_score)
+```
+Não possuo conhecimento suficiente sobre filmes para dar uma explicação razoável. Porém, é compreensível que crítica e público discordem, afinal os critérios para uma boa nota são diferentes.
+
+

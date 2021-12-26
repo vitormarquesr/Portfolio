@@ -371,3 +371,82 @@ suporte à hipótese de que muitos filmes bem avaliados também têm a
 classificação Drama por Drama ser um gênero muito abrangente. Afinal,
 drama está presente em quase todo filme, é uma condição para um bom
 enredo.
+
+------------------------------------------------------------------------
+
+## 2.2 - Covariação
+
+Agora vamos analisar como uma variável varia em função de outra. Para
+facilitar, dividiremos em tipos de variável.
+
+### 2.2.1 - Contínua x Contínua
+
+#### 2.2.1.1 - Meta\_Score x IMDB\_Rating
+
+Lembrando, Meta\_Score é atribuído pela crítica especializada,
+estudiosos do assunto. Já IMDB\_Rating é dado por usuários comuns que
+podem ser leigos no assunto.
+
+> Pergunta: Filmes bem avaliados pelo público tendem também a ser bem
+> avalidos pela crítica?
+
+``` r
+df %>% ggplot(aes(x=IMDB_Rating, y=Meta_score))+
+  geom_point()+
+  geom_smooth(se=FALSE)
+```
+
+![](Analise_Filmes_Notebook_files/figure-gfm/Meta_Score%20x%20IMDB_Rating-1.png)<!-- -->
+
+Primeiramente, vamos observar que IMDB\_Rating só assume números com uma
+casa decimal, por isso as linhas verticais. Vamos adicionar um pouco de
+ruído para facilitar a observação.
+
+``` r
+df %>% ggplot(aes(x=IMDB_Rating, y=Meta_score))+
+  geom_jitter()+
+  geom_smooth(se=FALSE)
+```
+
+![](Analise_Filmes_Notebook_files/figure-gfm/Meta_Score%20x%20IMDB_Rating%20jitter-1.png)<!-- -->
+
+-   **Análise:** Pelo modelo ajustado com geom\_smooth (a linha azul), é
+    possível observar que há um crescimento do Meta\_Score com o
+    crescimento do IMDB\_Rating. Porém esse comportamento está longe de
+    ser linear. Além disso, quanto menor o IMDB\_Rating, maior a
+    variação de Meta\_score, ou seja, menor o consenso entre Críticos e
+    Público.
+
+Vamos observar alguns filmes que são bem avaliados pelo público, mas não
+pelo Meta\_score.
+
+``` r
+df %>% filter(Meta_score < 50) %>% select(Series_Title, Meta_score, IMDB_Rating) %>% arrange(Meta_score)
+```
+
+    ## # A tibble: 19 x 3
+    ##    Series_Title                   Meta_score IMDB_Rating
+    ##    <chr>                               <dbl>       <dbl>
+    ##  1 I Am Sam                               28         7.7
+    ##  2 The Butterfly Effect                   30         7.6
+    ##  3 Tropa de Elite                         33         8  
+    ##  4 Seven Pounds                           36         7.6
+    ##  5 Kai po che!                            40         7.7
+    ##  6 Fear and Loathing in Las Vegas         41         7.6
+    ##  7 The Boondock Saints                    44         7.8
+    ##  8 Predator                               45         7.8
+    ##  9 Flipped                                45         7.7
+    ## 10 Jeux d'enfants                         45         7.6
+    ## 11 Saw                                    46         7.6
+    ## 12 Pink Floyd: The Wall                   47         8.1
+    ## 13 Bound by Honor                         47         8  
+    ## 14 Man on Fire                            47         7.7
+    ## 15 Primal Fear                            47         7.7
+    ## 16 Remember the Titans                    48         7.8
+    ## 17 Bohemian Rhapsody                      49         8  
+    ## 18 La migliore offerta                    49         7.8
+    ## 19 Sleepers                               49         7.6
+
+Não possuo conhecimento suficiente sobre filmes para dar uma explicação
+razoável. Porém, é compreensível que crítica e público discordem, afinal
+os critérios para uma boa nota são diferentes.
