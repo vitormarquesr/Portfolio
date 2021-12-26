@@ -450,3 +450,56 @@ df %>% filter(Meta_score < 50) %>% select(Series_Title, Meta_score, IMDB_Rating)
 Não possuo conhecimento suficiente sobre filmes para dar uma explicação
 razoável. Porém, é compreensível que crítica e público discordem, afinal
 os critérios para uma boa nota são diferentes.
+
+### 2.2.2 - Contínua x Categórica
+
+#### 2.2.2.1 - Runtime x Genre
+
+> Pergunta: Como o gênero afeta o tempo de duração de um filme?
+
+``` r
+df_genero %>% ggplot(aes(x=fct_reorder(Genre, Runtime, .fun=median, na.rm=TRUE), y=Runtime))+
+  geom_boxplot()+
+  coord_flip()+
+  labs(x="Gênero", y="Tempo de duração")
+```
+
+![](Analise_Filmes_Notebook_files/figure-gfm/Runtime%20x%20Genre-1.png)<!-- -->
+
+-   **Análise:** Os gêneros com maior tempo de duração mediano são
+    Musical, História, Faroeste e Guerra. Já os com menor tempo de
+    duração mediano são Animação, Terror, Família e Comédia. Basta
+    lembrar que um filme pode ter mais de um gênero, a combinação pode
+    afetar o comportamento da duração de uma forma que essa análise não
+    capta, é um processo simplificado. Porém, os dados estão
+    condizentes, é empírico, por exemplo, é sabido que animações são
+    mais curtas, e filmes de guerra mais longos.
+
+### 2.2.3 - Categórica x Categórica
+
+#### 2.2.3.1 Certificate x Genre
+
+> Pergunta: Os gêneros são classificados em geral para qual faixa
+> etária?
+
+``` r
+df_genero %>% filter(!is.na(Certificate)) %>% 
+  count(Genre, Certificate) %>% 
+  group_by(Genre) %>%
+  mutate(prop=100*n/sum(n))%>%
+  ggplot(aes(x=fct_reorder2(Genre, Certificate, desc(prop)), y=Certificate))+
+  geom_point(aes(alpha=prop, colour=Certificate), shape="square", size=4,
+             show.legend=FALSE)+
+  geom_text(aes(label=paste(round(prop,0),"%")),nudge_y=0.18)+
+  labs(x="Gênero", y="Classificação Indicativa")+
+  scale_colour_manual(values=c("L"="green2","12+"="yellow2","16+"="red2"))+
+  coord_flip()
+```
+
+![](Analise_Filmes_Notebook_files/figure-gfm/Certificate%20x%20Genre-1.png)<!-- -->
+
+-   **Análise:** O gráfico indica que os gêneros Terror, Crime, Suspense
+    e Mistério possuem a maior porcentagem de filmes classificados como
+    16+, o que é esperado dado a quantidade de violência e temas
+    sensíveis nesses gêneros. Já Família, Animação e Musical possuem a
+    maior porcentagem de classificação “L”.
