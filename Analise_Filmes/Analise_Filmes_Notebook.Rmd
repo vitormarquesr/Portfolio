@@ -350,5 +350,59 @@ df_genero %>% filter(!is.na(Certificate)) %>%
 
 * **Análise:** O gráfico indica que os gêneros Terror, Crime, Suspense e Mistério possuem a maior porcentagem de filmes classificados como 16+, o que é esperado dado a quantidade de violência e temas sensíveis nesses gêneros. Já Família, Animação e Musical possuem a maior porcentagem de classificação "L".
 
+## 2.3 Extra - Análise dos atores
+Agora faremos a análise também dos atores, decidi colocar em uma seção à parte, pois será necessário algumas modificações nos data frames.
+
+### 2.3.1 - Transformações
+No data frame, os atores estão localizados em quatro variáveis Star1-Star4, porém isso dificulta a análise, pois um ator pode aparecer em variáveis diferentes. Por exemplo, Leonardo DiCaprio pode em uma filme ser Star1 e em outro Star4. Para facilitar, colocaremos essas variáveis e seus valores em observações.
+
+Criaremos dois novos data frames.
+
+* **df_atores:** Transformações citadas aplicadas no data frame original
+* **df_atores_genero:** Transformações citadas aplicadas no df_genero (Com os gêneros em observações).
+
+```{r transformacao atores}
+df_atores <- df %>% pivot_longer(Star1:Star4, names_to="Categoria", values_to="Ator")
+
+df_atores_genero <- df_genero %>% pivot_longer(Star1:Star4, names_to="Categoria", values_to="Ator")
+
+```
+
+As transformações fazem com que ao invés de em colunas, star1,star2,star3,star4 fiquem em observações. Como mostrado abaixo.
+
+```{r transformacao expo}
+df_atores %>% select(Categoria, Ator) %>% head(10)
+
+```
+
+### 2.3.2 - Ator
+
+> Pergunta: Quais atores aparecem mais nesses 1000 filmes?
+
+```{r ator}
+df_atores %>% count(Ator) %>% arrange(desc(n)) %>% head(10)
+
+```
+
+O resultado não é uma surpresa, são atores muito bons e famosos, é esperado que estejam presentes em muitos filmes bem avalidos.
+
+
+### 2.3.3 - Ator e Categoria
+É possível subentender do data frame que a variável "Categoria" é ordinal, ou seja, Star1 é o ator principal, Star2 o secundário e assim por diante. 
+
+> Pergunta: Dos filmes que participaram, em quantos os atores aparecem em papeis principais?
+
+```{r ator e categoria}
+df_atores %>% count(Ator, Categoria) %>% 
+  arrange(desc(n)) %>% 
+  group_by(Ator) %>% 
+  mutate(Total=sum(n), Prop=str_c(round(100*n/Total,0),"%")) %>%
+  head(10)
+
+```
+
+* **Análise:** Tom Hanks, Leonardo DiCaprio, Clint Eastwood, Johnny Depp assumem na maior parte das vezes papeis principais. Já Robert De Niro participa também com frequência de papeis secundários.
+
+
 
 

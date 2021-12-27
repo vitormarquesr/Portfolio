@@ -503,3 +503,111 @@ df_genero %>% filter(!is.na(Certificate)) %>%
     16+, o que é esperado dado a quantidade de violência e temas
     sensíveis nesses gêneros. Já Família, Animação e Musical possuem a
     maior porcentagem de classificação “L”.
+
+## 2.3 Extra - Análise dos atores
+
+Agora faremos a análise também dos atores, decidi colocar em uma seção à
+parte, pois será necessário algumas modificações nos data frames.
+
+### 2.3.1 - Transformações
+
+No data frame, os atores estão localizados em quatro variáveis
+Star1-Star4, porém isso dificulta a análise, pois um ator pode aparecer
+em variáveis diferentes. Por exemplo, Leonardo DiCaprio pode em uma
+filme ser Star1 e em outro Star4. Para facilitar, colocaremos essas
+variáveis e seus valores em observações.
+
+Criaremos dois novos data frames.
+
+-   **df\_atores:** Transformações citadas aplicadas no data frame
+    original
+-   **df\_atores\_genero:** Transformações citadas aplicadas no
+    df\_genero (Com os gêneros em observações).
+
+``` r
+df_atores <- df %>% pivot_longer(Star1:Star4, names_to="Categoria", values_to="Ator")
+
+df_atores_genero <- df_genero %>% pivot_longer(Star1:Star4, names_to="Categoria", values_to="Ator")
+```
+
+As transformações fazem com que ao invés de em colunas,
+star1,star2,star3,star4 fiquem em observações. Como mostrado abaixo.
+
+``` r
+df_atores %>% select(Categoria, Ator) %>% head(10)
+```
+
+    ## # A tibble: 10 x 2
+    ##    Categoria Ator          
+    ##    <chr>     <chr>         
+    ##  1 Star1     Tim Robbins   
+    ##  2 Star2     Morgan Freeman
+    ##  3 Star3     Bob Gunton    
+    ##  4 Star4     William Sadler
+    ##  5 Star1     Marlon Brando 
+    ##  6 Star2     Al Pacino     
+    ##  7 Star3     James Caan    
+    ##  8 Star4     Diane Keaton  
+    ##  9 Star1     Christian Bale
+    ## 10 Star2     Heath Ledger
+
+### 2.3.2 - Ator
+
+> Pergunta: Quais atores aparecem mais nesses 1000 filmes?
+
+``` r
+df_atores %>% count(Ator) %>% arrange(desc(n)) %>% head(10)
+```
+
+    ## # A tibble: 10 x 2
+    ##    Ator                  n
+    ##    <chr>             <int>
+    ##  1 Robert De Niro       17
+    ##  2 Tom Hanks            14
+    ##  3 Al Pacino            13
+    ##  4 Brad Pitt            12
+    ##  5 Clint Eastwood       12
+    ##  6 Christian Bale       11
+    ##  7 Leonardo DiCaprio    11
+    ##  8 Matt Damon           11
+    ##  9 James Stewart        10
+    ## 10 Denzel Washington     9
+
+O resultado não é uma surpresa, são atores muito bons e famosos, é
+esperado que estejam presentes em muitos filmes bem avalidos.
+
+### 2.3.3 - Ator e Categoria
+
+É possível subentender do data frame que a variável “Categoria” é
+ordinal, ou seja, Star1 é o ator principal, Star2 o secundário e assim
+por diante.
+
+> Pergunta: Dos filmes que participaram, em quantos os atores aparecem
+> em papeis principais?
+
+``` r
+df_atores %>% count(Ator, Categoria) %>% 
+  arrange(desc(n)) %>% 
+  group_by(Ator) %>% 
+  mutate(Total=sum(n), Prop=str_c(round(100*n/Total,0),"%")) %>%
+  head(10)
+```
+
+    ## # A tibble: 10 x 5
+    ## # Groups:   Ator [10]
+    ##    Ator              Categoria     n Total Prop 
+    ##    <chr>             <chr>     <int> <int> <chr>
+    ##  1 Tom Hanks         Star1        12    14 86%  
+    ##  2 Robert De Niro    Star1        11    17 65%  
+    ##  3 Al Pacino         Star1        10    13 77%  
+    ##  4 Clint Eastwood    Star1        10    12 83%  
+    ##  5 Humphrey Bogart   Star1         9     9 100% 
+    ##  6 Leonardo DiCaprio Star1         9    11 82%  
+    ##  7 Christian Bale    Star1         8    11 73%  
+    ##  8 James Stewart     Star1         8    10 80%  
+    ##  9 Johnny Depp       Star1         8     9 89%  
+    ## 10 Aamir Khan        Star1         7     8 88%
+
+-   **Análise:** Tom Hanks, Leonardo DiCaprio, Clint Eastwood, Johnny
+    Depp assumem na maior parte das vezes papeis principais. Já Robert
+    De Niro participa também com frequência de papeis secundários.
