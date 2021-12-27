@@ -350,6 +350,8 @@ df_genero %>% filter(!is.na(Certificate)) %>%
 
 * **Análise:** O gráfico indica que os gêneros Terror, Crime, Suspense e Mistério possuem a maior porcentagem de filmes classificados como 16+, o que é esperado dado a quantidade de violência e temas sensíveis nesses gêneros. Já Família, Animação e Musical possuem a maior porcentagem de classificação "L".
 
+--------------------
+
 ## 2.3 Extra - Análise dos atores
 Agora faremos a análise também dos atores, decidi colocar em uma seção à parte, pois será necessário algumas modificações nos data frames.
 
@@ -404,5 +406,34 @@ df_atores %>% count(Ator, Categoria) %>%
 * **Análise:** Tom Hanks, Leonardo DiCaprio, Clint Eastwood, Johnny Depp assumem na maior parte das vezes papeis principais. Já Robert De Niro participa também com frequência de papeis secundários.
 
 
+### 2.3.4 - Ator e Gênero
+> Pergunta: Quais atores preferem quais gêneros?
 
+```{r ator e genero}
+df_atores_genero %>%
+  count(Ator, Genre) %>%
+  arrange(desc(n)) %>%
+  head(30)
 
+```
+
+### 2.3.5 - Ator e Diretor
+> Pergunta: Quais diretores e atores costumam trabalhar juntos?
+
+```{r ator e diretor}
+df_atores %>%
+  count(Director, Ator) %>%
+  arrange(desc(n))
+
+```
+
+-----------------
+
+# 3 - Conclusão
+
+1. Filmes com IMDB_Rating acima de 8.7 são muito raros.
+2. O número de filmes entre os 1000 mais bem avaliados cresce a medida que o ano de lançamento aumenta. Isso se deve ao crescimento da indústria cinematográfica.
+3. O gênero mais presente entre os filmes bem avaliados é o Drama. Isso ocorre, pois é um gênero muito abrangente.
+4. O Meta_Score (Crítica especializada) aumenta com o aumento do IMDB_Rating (Crítica não especializada). Porém a relação não é linear. Quanto menor o IMDB_Rating, maior a variação do Meta_Score (Menor o consenso entre críticos e público).
+5. Os gêneros com filmes mais longos são Musical, História, Faroeste e Guerra. Já os com mais curto são Animação, Noir, Terror, Família e Comédia.
+6. Os gêneros que possuem filmes com classificação indicativa mais altas são Terror, Crime, Suspense, Mistério e Guerra. Já os com classificação indicativa mais baixas são Família, Animação, Musical e Aventura.

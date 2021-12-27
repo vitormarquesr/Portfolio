@@ -504,6 +504,8 @@ df_genero %>% filter(!is.na(Certificate)) %>%
     sensíveis nesses gêneros. Já Família, Animação e Musical possuem a
     maior porcentagem de classificação “L”.
 
+------------------------------------------------------------------------
+
 ## 2.3 Extra - Análise dos atores
 
 Agora faremos a análise também dos atores, decidi colocar em uma seção à
@@ -611,3 +613,76 @@ df_atores %>% count(Ator, Categoria) %>%
 -   **Análise:** Tom Hanks, Leonardo DiCaprio, Clint Eastwood, Johnny
     Depp assumem na maior parte das vezes papeis principais. Já Robert
     De Niro participa também com frequência de papeis secundários.
+
+### 2.3.4 - Ator e Gênero
+
+> Pergunta: Quais atores preferem quais gêneros?
+
+``` r
+df_atores_genero %>%
+  count(Ator, Genre) %>%
+  arrange(desc(n)) %>%
+  head(30)
+```
+
+    ## # A tibble: 30 x 3
+    ##    Ator              Genre     n
+    ##    <chr>             <chr> <int>
+    ##  1 Robert De Niro    Drama    17
+    ##  2 Al Pacino         Drama    13
+    ##  3 Robert De Niro    Crime    12
+    ##  4 Al Pacino         Crime    11
+    ##  5 Brad Pitt         Drama     9
+    ##  6 Christian Bale    Drama     9
+    ##  7 Denzel Washington Drama     9
+    ##  8 Ethan Hawke       Drama     9
+    ##  9 Leonardo DiCaprio Drama     9
+    ## 10 Tom Hanks         Drama     9
+    ## # ... with 20 more rows
+
+### 2.3.5 - Ator e Diretor
+
+> Pergunta: Quais diretores e atores costumam trabalhar juntos?
+
+``` r
+df_atores %>%
+  count(Director, Ator) %>%
+  arrange(desc(n))
+```
+
+    ## # A tibble: 3,731 x 3
+    ##    Director          Ator                n
+    ##    <chr>             <chr>           <int>
+    ##  1 Akira Kurosawa    Toshirô Mifune      7
+    ##  2 Charles Chaplin   Charles Chaplin     6
+    ##  3 Joel Coen         Ethan Coen          6
+    ##  4 Martin Scorsese   Robert De Niro      6
+    ##  5 Akira Kurosawa    Tatsuya Nakadai     5
+    ##  6 Clint Eastwood    Clint Eastwood      5
+    ##  7 Peter Jackson     Ian McKellen        5
+    ##  8 Richard Linklater Ethan Hawke         5
+    ##  9 Woody Allen       Woody Allen         5
+    ## 10 Akira Kurosawa    Takashi Shimura     4
+    ## # ... with 3,721 more rows
+
+------------------------------------------------------------------------
+
+# 3 - Conclusão
+
+1.  Filmes com IMDB\_Rating acima de 8.7 são muito raros.
+2.  O número de filmes entre os 1000 mais bem avaliados cresce a medida
+    que o ano de lançamento aumenta. Isso se deve ao crescimento da
+    indústria cinematográfica.
+3.  O gênero mais presente entre os filmes bem avaliados é o Drama. Isso
+    ocorre, pois é um gênero muito abrangente.
+4.  O Meta\_Score (Crítica especializada) aumenta com o aumento do
+    IMDB\_Rating (Crítica não especializada). Porém a relação não é
+    linear. Quanto menor o IMDB\_Rating, maior a variação do Meta\_Score
+    (Menor o consenso entre críticos e público).
+5.  Os gêneros com filmes mais longos são Musical, História, Faroeste e
+    Guerra. Já os com mais curto são Animação, Noir, Terror, Família e
+    Comédia.
+6.  Os gêneros que possuem filmes com classificação indicativa mais
+    altas são Terror, Crime, Suspense, Mistério e Guerra. Já os com
+    classificação indicativa mais baixas são Família, Animação, Musical
+    e Aventura.
