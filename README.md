@@ -11,5 +11,12 @@ Estudo Estatística na Universidade Federal de Minas Gerais (UFMG), adoro matem�
 
 ## Projetos Pessoais:
 
-* **Análise Exploratória de Dados dos 1000 filmes mais bem avaliados**: https://github.com/vitormarquesr/Portfolio/blob/main/Analise_Filmes/Analise_Filmes_Notebook.md
-* **Análise Probabilística de Estratégias para um jogo proposto (Utilizando Simulação de Monte Carlo)**: https://github.com/vitormarquesr/Jogo_de_Natal/blob/main/Analise.md 
+### 1. Análise Exploratória de Dados
+-  **R**
+    - **[Análise Exploratória de Dados dos 1000 filmes mais bem avaliados](https://github.com/vitormarquesr/Portfolio/blob/main/Analise_Filmes/Analise_Filmes_Notebook.md)**: 
+
+### 2. Simulação
+- **R**
+    - **[Análise probabilística de estratégias para um jogo proposto (Utilizando Simulação de Monte Carlo)](https://github.com/vitormarquesr/Jogo_de_Natal/blob/main/Analise.md )**: 
+- **Python**
+    - **[Simulação do princípio de Hardy-Weinberg para evolução de populações](https://github.com/vitormarquesr/Hardy_Weinberg/blob/main/Simulacao_Equilibrio.ipynb)**: 
